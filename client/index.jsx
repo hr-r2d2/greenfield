@@ -9,12 +9,16 @@ import Display from './components/Display.jsx';
 import ReviewFeed from './components/ReviewFeed.jsx';
 import HeartButton from './components/HeartButton.jsx'
 import TestAds from './components/TestAds.jsx';
+import Chat from './components/Chat.jsx'
 
 import './s-alert-default.css';
 import './style.css';
 import {ButtonToolbar, Button} from 'react-bootstrap';
+<<<<<<< HEAD
 /* CHAT */
 import Chat from './components/Chat.jsx'
+=======
+>>>>>>> dev
 
 class App extends React.Component {
   constructor(props) {
@@ -22,7 +26,12 @@ class App extends React.Component {
 
     this.state = {
       rooms: [],
+<<<<<<< HEAD
+=======
+      selectedRoom: '',
+>>>>>>> dev
       cafes: [],
+      invitations: [],
       username: '',
       password: '',
       userId: '',
@@ -50,6 +59,14 @@ class App extends React.Component {
     this.showReviewFeed = this.showReviewFeed.bind(this);
 
     this.renderChat = this.renderChat.bind(this);
+<<<<<<< HEAD
+=======
+    this.getInvitation = this.getInvitation.bind(this);
+
+    this.handleSelectedRoom = this.handleSelectedRoom.bind(this);
+    this.acceptInvitation = this.acceptInvitation.bind(this);
+    this.rejectInvitation = this.rejectInvitation.bind(this);
+>>>>>>> dev
   }
 
   componentDidMount() {
@@ -95,6 +112,7 @@ class App extends React.Component {
         password: this.state.password
       })
       .then((response) => {
+<<<<<<< HEAD
         // response.data returns userId
 
         console.log(response)
@@ -104,6 +122,14 @@ class App extends React.Component {
           membership: response.data.membership,
           password: ''
         });
+=======
+        this.setState({
+          loggedIn: true,
+          userId: response.data.id,
+          password: '',
+          membership: response.data.membership
+        }, () => {this.getGroups()});
+>>>>>>> dev
       })
       .catch((err) => {
         console.error('Username or password is incorrect', err);
@@ -183,6 +209,7 @@ class App extends React.Component {
   /* ======================== */
 
   getGroups() {
+<<<<<<< HEAD
     console.log('clicking get groups function')
     // TODO: Call function after user is successfully logged in. 
     //  - Change this.state.loggedIn to this.state.rooms.length > 0 
@@ -193,6 +220,37 @@ class App extends React.Component {
     //   this.setState({rooms: response.data})
     // })
     // .catch((err) => console.log('Error getting groups', err))
+=======
+    axios.get('/groups', { params: { user_id: this.state.userId}})
+    .then((response) => this.setState({rooms: response.data}, () => {this.getInvitation()}))
+    .catch((err) => console.log('Error getting groups', err))
+  }
+
+  getInvitation() {
+    axios.get('/group-invitation', { params: { user_id: this.state.userId}})
+    .then((response) => this.setState({invitations: response.data}))
+    .catch((err) => console.log('Error getting groups', err)) 
+  }
+
+  acceptInvitation(chatgroups_id) {
+    console.log({chatgroups_id: chatgroups_id, user_id: this.state.userId})
+    axios.post('/accept-invitation', {chatgroups_id: chatgroups_id, user_id: this.state.userId})
+    .then(response => console.log('success', response))
+    .catch(err => console.log('Error accepting invitation', err))
+  }
+
+  rejectInvitation(chatgroups_id) {
+    console.log({chatgroups_id: chatgroups_id, user_id: this.state.userId})
+    axios.delete('/group-invitation', {chatgroups_id: chatgroups_id, user_id: this.state.userId})
+    .then(response => this.getInvitation())
+    .catch(err => console.log('Error deleting invitation', err))
+  }
+
+  handleSelectedRoom (room) {
+    this.setState({
+      selectedRoom: room
+    })
+>>>>>>> dev
   }
 
   render() {
@@ -245,13 +303,25 @@ class App extends React.Component {
           getGroups={this.getGroups}
           getUser={this.getUser}
           showReviewFeed={this.showReviewFeed}
+<<<<<<< HEAD
+=======
+          rooms={this.state.rooms}
+          handleSelectedRoom={this.handleSelectedRoom}
+          invitations={this.state.invitations}
+          acceptInvitation={this.acceptInvitation}
+          rejectInvitation={this.rejectInvitation}
+>>>>>>> dev
         />
 
         {ourHomePage}
 
         {
           this.state.showChat &&
+<<<<<<< HEAD
           <Chat username={this.state.username} userId={this.state.userId} password={this.state.password}/> 
+=======
+          <Chat username={this.state.username} userId={this.state.userId} rooms={this.state.rooms} selectedRoom={this.state.selectedRoom}/> 
+>>>>>>> dev
         }
 
         {

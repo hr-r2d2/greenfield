@@ -52,13 +52,32 @@ CREATE TABLE chatgroups (
   id INT PRIMARY KEY AUTO_INCREMENT,
   creator_id INT,
   group_name VARCHAR(255) UNIQUE,
+<<<<<<< HEAD
   group_thumbnail VARCHAR(255),
+=======
+>>>>>>> dev
   group_topic VARCHAR(255),
   FOREIGN KEY (creator_id) REFERENCES users(id)
 );
 
+<<<<<<< HEAD
 CREATE TABLE users_chatgroups (
   user_id INT,
   chatgroups_id 
+=======
+CREATE TABLE chatgroups_users (
+  user_id INT,
+  chatgroups_id INT,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (chatgroups_id) REFERENCES chatgroups(id)
+);
+
+CREATE TABLE chatgroups_invitations (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  chatgroups_id INT, 
+  user_id INT,
+  FOREIGN KEY (chatgroups_id) REFERENCES chatgroups(id),
+  FOREIGN KEY (user_id) REFERENCES users(id)
+>>>>>>> dev
 );
 

@@ -53,6 +53,7 @@ io.on('connection', (socket) => {
 });
 
 app.get('/groups', (req, res) => {
+<<<<<<< HEAD
   let { user_id } = req.params
   console.log(user_id)
   // TODO: Create and use model to fetch groups by user_id 
@@ -74,6 +75,60 @@ app.delete('/groups', (req, res) => {
 // io.on("connection", function() {
 //   console.log("Socket.io is listening");
 // });
+=======
+  let { user_id } = req.query
+  models.selectGroups(user_id, (err, response) => {
+    if (err) res.sendStatus(500)
+    else res.send(response)
+  })
+})
+
+app.post('/groups', (req, res) => {
+  models.createGroup(req.body, (err, response) => {
+    if (err) res.sendStatus(500)
+    else res.send(response)
+  })
+})
+
+app.post('/group-invitation', (req, res) => {
+  let {usersNameArray, chatgroups_id} = req.body;
+  models.sendInvitation(chatgroups_id, usersNameArray, (err, response) => {
+    if (err) res.sendStatus(500)
+    else res.send(response)
+  })
+})
+
+app.get('/group-invitation', (req, res) => {
+  let { user_id } = req.query
+  models.getInvitations(user_id, (err, response) => {
+    if (err) res.sendStatus(500)
+    else res.send(response)
+  })
+})
+
+app.post('/accept-invitation', (req, res) => {
+  let { id, chatgroups_id, user_id } = req.body
+  models.acceptInvitation(chatgroups_id, user_id, (err, response) => {
+    if (err) res.send(err)
+    else {
+      console.log('response', response)
+      res.send(response)
+    //   models.deleteInvitation(id, (err, resp) => {
+    //   if (err) res.send(err)
+    //   else res.send(resp)
+    // })
+    }
+  })
+})
+
+app.delete('/group-invitation', (req, res) => {
+  let { id, chatgroups_id, user_id } = req.body
+  models.deleteInvitation(id, (err, resp) => {
+    if (err) res.sendStatus(500)
+    else res.send(resp)
+  })
+})
+>>>>>>> dev
 
 /* ===================== */
 /* ===================== */

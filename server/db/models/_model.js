@@ -420,6 +420,106 @@ let updateMembership = (userId, cb) => {
   })
 }
 
+<<<<<<< HEAD
+=======
+  /* ======================== */
+  /* CHAT FUNCTIONS           */
+  /* ======================== */
+
+let createGroup = (dataSet, cb) => {
+  let sqlStatement1 = `INSERT INTO chatgroups SET ?`
+  let sqlStatement2 = `INSERT INTO chatgroups_users (user_id, chatgroups_id) VALUES (?, ?)`
+
+  db.getConnection((err, conn) => {
+    conn.query(sqlStatement1, dataSet, (err, res) => {
+      if (err) {
+        cb(err)
+      } else {
+
+        conn.query(sqlStatement2, [dataSet.creator_id, res.insertId], (err, result) => {
+          if (err) cb(err)
+          else {
+            console.log(res.insertId)
+            result['chatgroups_id'] = res.insertId
+            cb(null, result)
+          }
+        })
+      }
+      conn.release();
+    })
+  })
+}
+ 
+let selectGroups = (user_id, cb) => {
+  let sqlStatement = `SELECT group_name, group_topic 
+  FROM chatgroups
+  JOIN chatgroups_users ON chatgroups.id = chatgroups_users.chatgroups_id
+  WHERE user_id  = ? ` 
+  db.getConnection((err, conn) => {
+    conn.query(sqlStatement, user_id, (err, results) => {
+      if (err) cb(err)
+      else cb(null, results);     
+      conn.release();
+    })
+  })
+}
+
+let sendInvitation = (chatgroups_id, usersArr, cb) => {
+  let sqlStatement = `INSERT INTO chatgroups_invitations (chatgroups_id, user_id)
+    VALUES (?, (SELECT id FROM users WHERE username = ?))`
+  let promises = []
+  usersArr.forEach((user) => {
+    promises.push( new Promise((resolve, reject) => {
+       db.getConnection((err, conn) => {
+        conn.query(sqlStatement, [chatgroups_id, user], (err, results) => {
+          if (err) reject(err)
+          else resolve(results);     
+        }) 
+      })
+    })
+    )
+  })
+
+  return Promise.all(promises)
+    .then(response => cb(null, response))
+    .catch(err => cb(err))
+}
+
+let getInvitations = (user_id, cb) => {
+  let sqlStatement = `SELECT * from chatgroups_invitations WHERE user_id = ?`
+  db.getConnection((err, conn) => {
+    conn.query(sqlStatement, user_id, (err, results) => {
+      if (err) cb(err)
+      else cb(null, results);     
+      conn.release();
+    })
+  })
+}
+
+let acceptInvitation = ( chatgroups_id, user_id, cb ) => {
+  console.log('INSIDE MODEL', chatgroups_id, user_id,)
+  let sqlStatement = `INSERT INTO chatgroups_users (user_id, chatgroups_id) VALUES (?, ?)`
+  db.getConnection((err, conn) => {
+    conn.query(sqlStatement, [user_id, chatgroups_id], (err, results) => {
+      if (err) cb(err)
+      else cb(null, results);     
+      conn.release();
+    })
+  })
+}
+
+let deleteInvitation = ( id, cb) => {
+  let sqlStatement = `DELETE FROM chatgroups_invitations WHERE id = ?`
+  db.getConnection((err, conn) => {
+    conn.query(sqlStatement, id, (err, results) => {
+      if (err) cb(err)
+      else cb(null, results);     
+      conn.release();
+    })
+  })
+}
+
+>>>>>>> dev
 let addPic = ({user_id, url}, cb) => {
   console.log(user_id);
   console.log(url);
@@ -450,7 +550,10 @@ let getPic = (user_id, cb) => {
   })
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> dev
 module.exports = {
   saveSpots: saveSpots,
   addPic: addPic,
@@ -472,4 +575,13 @@ module.exports = {
   updateMembership: updateMembership,
   updateBio: updateBio,
   getBio: getBio,
+<<<<<<< HEAD
+=======
+  createGroup: createGroup, 
+  selectGroups: selectGroups, 
+  sendInvitation: sendInvitation,
+  getInvitations: getInvitations, 
+  acceptInvitation: acceptInvitation,
+  deleteInvitation: deleteInvitation
+>>>>>>> dev
 };
