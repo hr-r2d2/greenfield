@@ -141,7 +141,6 @@ class App extends React.Component {
 
   async getUser(){
     let response = await axios.get('/current_user')
-    console.log(response.data)
     this.setState({membership: response.data.membership})
   }
 
