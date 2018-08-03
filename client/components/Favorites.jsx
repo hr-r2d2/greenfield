@@ -16,10 +16,10 @@ class Favorites extends React.Component {
   modalBody() {
     if (this.state.favorites.length) {
       return (
-        <div class='favorites'>
+        <div className='favorites'>
               {this.state.favorites.map((cafe) => {
                 return (
-                  <div key={cafe.id} >
+                  <div >
                       <h4>{cafe.name}</h4>
                       <p>
                         {cafe.address}, {cafe.city}, {cafe.state}

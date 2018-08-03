@@ -6,7 +6,8 @@
   "scripts": {
     "start": "webpack -d && node server/controllers/index.js",
     "react-dev": "webpack -d --watch",
-    "server-dev": "nodemon server/controllers/index.js"
+    "server-dev": "nodemon server/controllers/index.js",
+    "review-feed-test": "mocha tests/reviewFeed.js"
   },
   "repository": {
     "type": "git",
@@ -27,8 +28,11 @@
     "babel-preset-react": "^6.23.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.3",
+    "chai": "^4.1.2",
+    "chai-http": "^4.0.0",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
+    "mocha": "^5.2.0",
     "morgan": "^1.9.0",
     "mysql": "^2.16.0",
     "nodemon": "^1.18.2",
@@ -36,18 +40,29 @@
     "react-bootstrap": "^0.32.1",
     "react-dom": "^16.4.1",
     "react-grid-layout": "^0.16.6",
+    "react-images-upload": "^1.2.0",
     "react-s-alert": "^1.4.1",
     "react-scroll-up": "^1.3.3",
     "react-stack-grid": "^0.7.1",
     "react-star-ratings": "^2.3.0",
     "react-stripe-elements": "^2.0.1",
+<<<<<<< HEAD
     "socket.io": "^2.1.1",
+=======
+    "react-tooltip": "^3.6.1",
+    "socket.io": "^2.1.1",
+    "socket.io-client": "^2.1.1",
+>>>>>>> 68c5d9f895d4cf4668b3a60c582df0197101d503
     "stripe": "^6.5.0",
     "style-loader": "^0.21.0",
     "universal-parallax": "^1.1.4",
     "webpack": "^2.7.0"
   },
   "devDependencies": {
-    "css-loader": "^1.0.0"
+    "body-parser": "^1.18.3",
+    "css-loader": "^1.0.0",
+    "express-fileupload": "^0.4.0",
+    "request": "^2.87.0",
+    "svg-inline-loader": "^0.8.0"
   }
 }

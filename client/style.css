@@ -70,7 +70,7 @@ button{
 
 .parallax {
   background-image: url("https://source.unsplash.com/random/featured/?coffee");
-  height: 55%;
+  height: 35%;
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
@@ -95,6 +95,7 @@ a:focus {
 
 
 .picture{
+  display:grid;
   height:200px;
   width:200px;
 }
@@ -182,15 +183,38 @@ a:focus {
   cursor: pointer;
 }
 
+.review-modal-user {
+  margin-left: 15px;
+  color: #a02525
+}
+
+.horse {
+  cursor: pointer;
+}
+
 .review-feed-title {
-  width: calc(100% - 175px);
+  width: calc(100% - 245px);
   position: relative;
   text-align: left;
   color: #525252;
   padding: 5px;
   margin: 5px;
-  font-size: 24px;
+  margin-top: 20px;
+  font-size: 28px;
   text-shadow: 1px 1px #a0252552;
+  display: inline-block;
+}
+
+.review-feed-exit {
+  width: 100px;
+  position: fixed;
+  float: right;
+  margin: 5px;
+  margin-left: 8px;
+  margin-top: 25px;
+  background-color: #a02525b7;
+  color: #fdfcfc;
+  
 }
 
 .review-feed-spacing {
@@ -213,7 +237,8 @@ a:focus {
 .parent-comment-heading {
   text-align: left;
   padding: 2px;
-  margin-top: 25px;
+  margin-top: 10px;
+  margin-left: 5px;
   color: #a02525e8;
   display: block;
 }
@@ -419,6 +444,9 @@ a:focus {
 
 .favorites{
   display:grid;
+}
+.favorites > div{
+  transition: all 0.2s ease-in;
 
 }
 .favorites > div:nth-child(odd) {
@@ -426,10 +454,17 @@ a:focus {
 }
 .favorites > div:nth-child(odd):hover {
     background-color: gainsboro;
+    border-top-color: #2b8df2;
+    border-left-color: #2b8df2;
+    box-shadow: 2px 2px 3px rgba(0,0,0,.3);
 }
 
 .favorites > div:nth-child(even):hover {
   background-color: darkgray;
+  border-top-color: #2b8df2;
+  border-left-color: #2b8df2;
+  box-shadow: 2px 2px 3px rgba(0,0,0,.3);
+
 }
 
 .favorites > div:nth-child(even) {
@@ -442,4 +477,31 @@ a:focus {
   /* grid-template-rows: 100px; */
   grid-gap: 5px;
   padding: 25px;
+}
+
+textarea {
+  resize: none;
+}
+/* 
+.bio .bio > div{
+
+} */
+
+.rightSide {
+  display: grid;
+  grid-template-rows:  1fr 1fr;
+}
+
+.fileContainer {
+  background: none;
+  box-shadow: 0 0 0 0;
+  position: relative;
+  border-radius: 10px;
+  padding: 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* flex-direction: column; */
+  margin: 10px auto;
+  transition: all 0.3s ease-in;
 }

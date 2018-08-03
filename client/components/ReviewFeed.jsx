@@ -26,8 +26,8 @@ class ReviewFeed extends React.Component {
       })
   }
   componentDidMount() {
+    // this.intervalFetchReviews = setInterval(() => this.getParentReviews(), 2000);
     this.getParentReviews()
-    this.intervalFetchReviews = setInterval(() => this.getParentReviews(), 2000);
   }
   render() {
     let reviews = this.state.reviews.map((review) => (
@@ -39,6 +39,7 @@ class ReviewFeed extends React.Component {
         <h4 className="review-feed-title">
         What the community is saying about their recent study spots:
         </h4>
+        <button onClick={this.props.showReviewFeed} className="review-feed-exit">CLOSE</button>
         {reviews}
       </div>
     )

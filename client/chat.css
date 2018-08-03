@@ -1,0 +1,17 @@
+.chat {
+  width: 490px;
+}
+
+.chat-header {
+  color: #008080;
+}
+
+.chat-body {
+  max-height: 200px;
+  overflow-y: scroll;
+
+}
+
+.chat-friend {
+  text-align: left;
+}

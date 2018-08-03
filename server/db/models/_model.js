@@ -215,6 +215,24 @@ let updateBio = function({user_id, bio}, cb) {
   });
 };
 
+let getBio = function({user_id}, cb) {
+  db.getConnection((err, conn) => {
+    conn.query(
+      `select bio from users where users.id = ${Number(user_id)}`,
+      (err, results) => {
+        if (err) {
+          console.error('Error getting bio', err);
+        } else {
+          console.log('Bio gotten', results);
+          cb(null, results);
+        }
+      }
+    );
+    conn.release();
+  });
+};
+
+
 
 
 let addFavorite = function({ user_id, location_id }, cb) {
@@ -237,6 +255,7 @@ let addFavorite = function({ user_id, location_id }, cb) {
   });
 };
 
+
 let getFavorite = function({ user_id }, cb) {
   var command = `SELECT id, name, city, state, address, image1, image2, image3
                  FROM users_locations
@@ -246,7 +265,7 @@ let getFavorite = function({ user_id }, cb) {
   db.getConnection((err, conn) => {
     conn.query(command, (err, results) => {
       if (err) {
-        console.error('Error getting user favorites', err);
+        console.log('Error getting user favorites', err);
       } else {
         console.log('Retrieved all user favorites', results);
         // Return user favorites for use in cb
@@ -318,8 +337,9 @@ let addPics = function({ pics, location_id }, cb) {
 
 let getFullReviews = function({ location_id, parent_id }, cb) {
   var params = [location_id, parent_id]
-  var command = `SELECT r.coffeeTea, r.atmosphere, r.comfort, r.food, c.text, c.user_id
+  var command = `SELECT r.coffeeTea, r.atmosphere, r.comfort, r.food, c.text, c.user_id, u.username
                   FROM comments as c
+                  JOIN users as u ON u.id=c.user_id
                   JOIN locations ON c.location=locations.id
                   JOIN ratings as r ON r.location=locations.id
                   WHERE locations.id=? AND parent_id=?
@@ -340,14 +360,14 @@ let getFullReviews = function({ location_id, parent_id }, cb) {
 };
 
 let getReviewByParentId = ({parentId}, cb) => {
-  let childSqlStatement = `SELECT l.name, l.city, l.state, l.address, c.text, c.user_id, c.parent_id, c.id, c.location, u.username
+  let childSqlStatement = `SELECT l.name, l.city, l.state, l.address, c.text, c.user_id, c.parent_id, c.id, c.location, u.username, u.membership
   FROM comments as c
   JOIN locations as l ON l.id=c.location
   JOIN users as u ON c.user_id=u.id
   WHERE parent_id=?
   GROUP BY c.text
   ORDER BY c.id`;
-  let sqlStatement = `SELECT l.name, l.city, l.state, l.address, r.coffeeTea, r.atmosphere, r.comfort, r.food, c.text, c.user_id, c.parent_id, c.id, c.location, u.username
+  let sqlStatement = `SELECT l.name, l.city, l.state, l.address, r.coffeeTea, r.atmosphere, r.comfort, r.food, c.text, c.user_id, c.parent_id, c.id, c.location, u.username, u.membership
   FROM comments as c
   JOIN locations as l ON l.id=c.location
   JOIN ratings as r ON r.id=c.rating_id
@@ -400,8 +420,137 @@ let updateMembership = (userId, cb) => {
   })
 }
 
+  /* ======================== */
+  /* CHAT FUNCTIONS           */
+  /* ======================== */
+
+let createGroup = (dataSet, cb) => {
+  let sqlStatement1 = `INSERT INTO chatgroups SET ?`
+  let sqlStatement2 = `INSERT INTO chatgroups_users (user_id, chatgroups_id) VALUES (?, ?)`
+
+  db.getConnection((err, conn) => {
+    conn.query(sqlStatement1, dataSet, (err, res) => {
+      if (err) {
+        cb(err)
+      } else {
+
+        conn.query(sqlStatement2, [dataSet.creator_id, res.insertId], (err, result) => {
+          if (err) cb(err)
+          else {
+            console.log(res.insertId)
+            result['chatgroups_id'] = res.insertId
+            cb(null, result)
+          }
+        })
+      }
+      conn.release();
+    })
+  })
+}
+ 
+let selectGroups = (user_id, cb) => {
+  let sqlStatement = `SELECT group_name, group_topic 
+  FROM chatgroups
+  JOIN chatgroups_users ON chatgroups.id = chatgroups_users.chatgroups_id
+  WHERE user_id  = ? ` 
+  db.getConnection((err, conn) => {
+    conn.query(sqlStatement, user_id, (err, results) => {
+      if (err) cb(err)
+      else cb(null, results);     
+      conn.release();
+    })
+  })
+}
+
+let sendInvitation = (chatgroups_id, usersArr, cb) => {
+  let sqlStatement = `INSERT INTO chatgroups_invitations (chatgroups_id, user_id)
+    VALUES (?, (SELECT id FROM users WHERE username = ?))`
+  let promises = []
+  usersArr.forEach((user) => {
+    promises.push( new Promise((resolve, reject) => {
+       db.getConnection((err, conn) => {
+        conn.query(sqlStatement, [chatgroups_id, user], (err, results) => {
+          if (err) reject(err)
+          else resolve(results);     
+        }) 
+      })
+    })
+    )
+  })
+
+  return Promise.all(promises)
+    .then(response => cb(null, response))
+    .catch(err => cb(err))
+}
+
+let getInvitations = (user_id, cb) => {
+  let sqlStatement = `SELECT * from chatgroups_invitations WHERE user_id = ?`
+  db.getConnection((err, conn) => {
+    conn.query(sqlStatement, user_id, (err, results) => {
+      if (err) cb(err)
+      else cb(null, results);     
+      conn.release();
+    })
+  })
+}
+
+let acceptInvitation = ( chatgroups_id, user_id, cb ) => {
+  console.log('INSIDE MODEL', chatgroups_id, user_id,)
+  let sqlStatement = `INSERT INTO chatgroups_users (user_id, chatgroups_id) VALUES (?, ?)`
+  db.getConnection((err, conn) => {
+    conn.query(sqlStatement, [user_id, chatgroups_id], (err, results) => {
+      if (err) cb(err)
+      else cb(null, results);     
+      conn.release();
+    })
+  })
+}
+
+let deleteInvitation = ( id, cb) => {
+  let sqlStatement = `DELETE FROM chatgroups_invitations WHERE id = ?`
+  db.getConnection((err, conn) => {
+    conn.query(sqlStatement, id, (err, results) => {
+      if (err) cb(err)
+      else cb(null, results);     
+      conn.release();
+    })
+  })
+}
+
+let addPic = ({user_id, url}, cb) => {
+  console.log(user_id);
+  console.log(url);
+  let sqlStatement = `update users set profile_pic = '${url}' where id = ${user_id}`
+  db.getConnection((err, conn) => {
+    conn.query(sqlStatement, (err, results) => {
+      if (err) {
+        cb(err)
+      } else {
+        cb(null, results);
+      }
+      conn.release();
+    })
+  })
+}
+
+let getPic = (user_id, cb) => {
+  let sqlStatement = `select profile_pic from users where id = ${user_id}`
+  db.getConnection((err, conn) => {
+    conn.query(sqlStatement, (err, results) => {
+      if (err) {
+        cb(err)
+      } else {
+        cb(null, results);
+      }
+      conn.release();
+    })
+  })
+}
+
 module.exports = {
   saveSpots: saveSpots,
+  addPic: addPic,
+  getPic: getPic,
   getRelevantFirst: getRelevantFirst,
   getAveragesAndReviewCount: getAveragesAndReviewCount,
   login: login,
@@ -418,4 +567,11 @@ module.exports = {
   postSubComment: postSubComment,
   updateMembership: updateMembership,
   updateBio: updateBio,
+  getBio: getBio,
+  createGroup: createGroup, 
+  selectGroups: selectGroups, 
+  sendInvitation: sendInvitation,
+  getInvitations: getInvitations, 
+  acceptInvitation: acceptInvitation,
+  deleteInvitation: deleteInvitation
 };
