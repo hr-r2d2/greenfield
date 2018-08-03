@@ -1,4 +1,4 @@
-USE Study;
+USE sampedb;
 
 CREATE TABLE users (
   id INT PRIMARY KEY AUTO_INCREMENT,
@@ -45,3 +45,20 @@ CREATE TABLE comments (
   location VARCHAR(255),
   FOREIGN KEY (location) REFERENCES locations(id) 
 );
+
+/* CHAT SCHEMAS */
+
+CREATE TABLE chatgroups (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  creator_id INT,
+  group_name VARCHAR(255) UNIQUE,
+  group_thumbnail VARCHAR(255),
+  group_topic VARCHAR(255),
+  FOREIGN KEY (creator_id) REFERENCES users(id)
+);
+
+CREATE TABLE users_chatgroups (
+  user_id INT,
+  chatgroups_id 
+);
+

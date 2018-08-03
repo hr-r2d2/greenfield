@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { TextInput, View ,Text, Alert, Button} from 'react-native';
-import styles from './Home.component.style';
-import TextArea from '../TextArea/TextArea.component';
+import styles from './Main.component.style';
+import { SearchBar } from 'react-native-elements'
 import axios from 'axios'
 
-export default class Home extends Component {
+export default class Main extends Component {
   constructor(props){
     super(props)
     this.state = {cafes: []}
@@ -52,14 +52,14 @@ export default class Home extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <TextArea 
-          handleTextInput={this.handleInput}/>
-        {/* <TextInput
-          style={{height: 40}}
-          placeholder="Type here to translate!"
-          onChangeText={(text) => this.setState({text})}
-        /> */}
-        <Button onPress={()=>this.handleSearch()} title='Search'></Button>
+        <View style={{flexDirection: 'row'}}>
+          <TextInput
+            style={{height: 40, width: "80%"}}
+            onChangeText={this.handleInput}
+            placeholder='Enter your address to find a STUD(y) spot...' />
+          <Button onPress={()=>this.handleSearch()} title='Search'></Button>
+        </View>
+        
         {this.state.cafes.map(cafe=>(
           <Text>{cafe.name}</Text>
         ))}

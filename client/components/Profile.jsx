@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Navbar,
   NavItem,
@@ -9,12 +9,15 @@ import {
   FormGroup,
   FormControl,
   Modal
-} from 'react-bootstrap';
+} from "react-bootstrap";
+
 
 // import './bootstrap.css'
 // import './profile.css'
 // import 'universal-parallax.min.css'
-import Favorites from './Favorites.jsx';
+import Favorites from "./Favorites.jsx";
+import Upload from "./Upload.jsx";
+import axios from "axios";
 
 class Profile extends React.Component {
   constructor(props) {
@@ -22,9 +25,19 @@ class Profile extends React.Component {
 
     this.state = {
       showProfile: false, //keep false by default
+      bio: null,
+      toggleForm: false,
+      userInput: "",
+      profilePic: null,
     };
 
     this.toggleProfile = this.toggleProfile.bind(this);
+    this.getBio = this.getBio.bind(this);
+    this.getPic = this.getPic.bind(this);
+    this.renderBio = this.renderBio.bind(this);
+    this.sendBio = this.sendBio.bind(this);
+    this.toggleForm = this.toggleForm.bind(this);
+    this.getBio();
   }
 
   toggleProfile() {
@@ -33,40 +46,113 @@ class Profile extends React.Component {
     });
   }
 
+  getBio() {
+    axios
+      .get(`/bio?user_id=${this.props.userId}`)
+      .then(({ data }) => this.setState({ bio: data[0].bio}));
+    this.getPic();
+  }
+  getPic() {
+    axios
+      .get(`/imgProfile?q=${this.props.userId}`)
+      .then(({data}) =>  this.setState({ profilePic: data === 'nothing' ? 'https://pbs.twimg.com/profile_images/702479650237366272/HyN65Fu7_400x400.jpg' : data}));
 
-  render() {
-      return (
-        <div>
-            <Button bsStyle="primary" onClick={this.toggleProfile}>
-              Launch Modal</Button>
-              <Modal show={this.state.showProfile} onHide={this.toggleProfile}>
-                <Modal.Body className="upper">
-                    {/* make this container a css grid */}
-                        <div className="picture">
-                        <img className="img-responsive thumbnail" src={this.props.profilePic} />
-                        </div>
-
-                        <div className="rightSide">
-                          <div className="title">
-                          <h1>{this.props.user}</h1>
-                          </div>
-                          <div className="bio">
-                          <p> {"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.".slice(0,280)}</p>
-                          </div>
-                  </div>
-
-                    <div className="down">
-                      <Favorites
-            userId={this.props.userId}
-            showFavorites={this.state.showProfile}
-            closeFavorites={this.toggleProfile}/>
-                    </div>
-                </Modal.Body>
-              </Modal>
-        </div>
-      );
-    }
+  }
+  sendBio() {
+    axios
+      .post(`/bio`, {
+        user_id: this.props.userId,
+        bio: this.state.userInput
+      })
+      .then(() => this.setState({ bio: this.state.userInput }));
+  }
+  toggleForm() {
+    this.setState({ toggleForm: !this.state.toggleForm });
   }
 
+  renderBio() {
+    if (this.state.toggleForm) {
+      return (
+        <form
+          onSubmit={e => {
+            e.preventDefault();
+            console.log(this.state.userInput);
+            this.sendBio();
+            this.setState({ bio: this.state.userInput });
+            this.toggleForm();
+          }}
+        >
+          <textarea
+            maxLength="280"
+            value={this.state.userInput}
+            onChange={e => this.setState({ userInput: e.target.value })}
+          />
+          <br />
+          <input
+            onSubmit={e => {
+              e.preventDefault();
+              this.sendBio();
+              this.toggleForm();
+            }}
+            type="submit"
+          />
+        </form>
+      );
+  } else {
+      return (
+        <div>
+          <a
+            className="emoji"
+            onClick={this.toggleForm}
+          >
+            🖋️
+          </a>
+
+          <p>{this.state.bio}</p>
+        </div>
+      );
+    } 
+  }
+
+  componentWillUpdate() {
+    if (this.props.userId && this.state.bio === null) this.getBio();
+  }
+
+  render() {
+    return (
+      <div>
+        <Modal show={this.props.showProfile} onHide={this.props.toggleProfile}>
+          <Modal.Body className="upper">
+            {/* make this container a css grid */}
+            <div className="picture">
+              <img
+                className="img-responsive thumbnail"
+                src={this.state.profilePic}
+              />
+              <Upload userId={this.props.userId} trigger={this.getPic}/>
+            </div>
+
+            <div className="rightSide">
+              <div className="title">
+                <h1>{this.props.user}</h1>
+              </div>
+              <div className="bio">
+                    {this.renderBio()}
+              </div>
+            </div>
+
+            <div className="down">
+              <Favorites
+                userId={this.props.userId}
+                showFavorites={this.state.showProfile}
+                closeFavorites={this.toggleProfile}
+              />
+            </div>
+          </Modal.Body>
+        </Modal>
+      </div>
+    );
+  }
+}
 
 export default Profile;
