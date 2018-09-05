@@ -46,6 +46,7 @@ build/
 .gradle
 .bat
 local.properties
+.pem
 *.iml
 
 # node.js

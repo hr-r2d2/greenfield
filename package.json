@@ -46,19 +46,9 @@
     "react-stack-grid": "^0.7.1",
     "react-star-ratings": "^2.3.0",
     "react-stripe-elements": "^2.0.1",
-<<<<<<< HEAD
     "react-tooltip": "^3.6.1",
     "socket.io": "^2.1.1",
     "socket.io-client": "^2.1.1",
-=======
-<<<<<<< HEAD
-    "socket.io": "^2.1.1",
-=======
-    "react-tooltip": "^3.6.1",
-    "socket.io": "^2.1.1",
-    "socket.io-client": "^2.1.1",
->>>>>>> 68c5d9f895d4cf4668b3a60c582df0197101d503
->>>>>>> dev
     "stripe": "^6.5.0",
     "style-loader": "^0.21.0",
     "universal-parallax": "^1.1.4",

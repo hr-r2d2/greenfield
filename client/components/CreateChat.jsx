@@ -8,21 +8,6 @@ class CreateChat extends React.Component {
     super(props);
 
     this.state = {
-<<<<<<< HEAD
-      group_name: '', 
-      group_thumbnail: '', 
-      group_topic: ''
-    };
-    this.createChat = this.createChat.bind(this);
-  }
-
-  createChat() {
-    let data = { user_id: this.props.user_id, group_name: this.state.group_name,  group_thumbnail: this.state.group_thumbnail, group_topic: this.state.group_topic }
-    axios.post('/groups', data)
-    .then((res) => {
-      console.log('Saved Data')
-      this.props.getGroups()
-=======
       group_id: '',
       group_name: '', 
       group_topic: '', 
@@ -42,15 +27,12 @@ class CreateChat extends React.Component {
     .then((res) => {
       this.props.getGroups();
       this.setState({group_id: res.data['chatgroups_id'], group_name: '', group_topic: '', viewInviteFriends: !this.state.viewInviteFriends})
->>>>>>> dev
     })
     .catch((err) => console.log('Error saving group ', err))
   }
 
   handleChange(e) {
     this.setState({[e.target.name]: e.target.value})
-<<<<<<< HEAD
-=======
   }
 
   addToFriends() {
@@ -69,7 +51,6 @@ class CreateChat extends React.Component {
     axios.post('/group-invitation', {usersNameArray: this.state.friends, chatgroups_id: this.state.group_id})
     .then((res) => console.log('Invations send', res))
     .catch((err) => console.log('Error sending invites ', err))
->>>>>>> dev
   }
 
   render() {
@@ -82,38 +63,6 @@ class CreateChat extends React.Component {
           </Modal.Header>
 
           <div>
-<<<<<<< HEAD
-            <Modal.Body>
-            <ControlLabel>Create a private stud(y) chat for your group.</ControlLabel>
-            <FormControl
-              type="text"
-              name="group_name"
-              placeholder="Stud(y) Name"
-              value={this.state.group_name}
-              onChange={(e) => {this.handleChange(e)}}
-            />
-            <FormControl
-              type="text"
-              name="group_thumbnail"
-              placeholder="Stud(y) Thumbnail"
-              value={this.state.group_thumbnail}
-              onChange={(e) => {this.handleChange(e)}}
-            />
-            <FormControl
-              type="text"
-              name="group_topic"
-              placeholder="Stud(y) Topic"
-              value={this.state.group_topic}
-              onChange={(e) => {this.handleChange(e)}}
-            />
-            </Modal.Body>
-            <Modal.Footer>
-              <Button>Close</Button>
-              <Button type="submit"
-                      value="Submit"
-                      onClick={(e) => {this.createChat(e)}}>Create Group</Button>
-          </Modal.Footer>
-=======
           {
             this.state.viewInviteFriends === false ? (
               <div>
@@ -179,7 +128,6 @@ class CreateChat extends React.Component {
               </div>
               )
           }
->>>>>>> dev
           </div>
         </Modal>
       </div>

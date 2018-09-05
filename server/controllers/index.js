@@ -53,29 +53,6 @@ io.on('connection', (socket) => {
 });
 
 app.get('/groups', (req, res) => {
-<<<<<<< HEAD
-  let { user_id } = req.params
-  console.log(user_id)
-  // TODO: Create and use model to fetch groups by user_id 
-})
-
-app.post('/groups', (req, res) => {
-  let { user_id,  group_name,  group_thumbnail, group_topic } = req.params
-
-  console.log(user_id)
-  // TODO: Create and use model to create groups by user_id 
-})
-
-app.delete('/groups', (req, res) => {
-  let { group_name } = req.params
-  console.log(group_name)
-  // TODO: Create and use model to delete groups by user_id 
-})
-
-// io.on("connection", function() {
-//   console.log("Socket.io is listening");
-// });
-=======
   let { user_id } = req.query
   models.selectGroups(user_id, (err, response) => {
     if (err) res.sendStatus(500)
@@ -128,7 +105,6 @@ app.delete('/group-invitation', (req, res) => {
     else res.send(resp)
   })
 })
->>>>>>> dev
 
 /* ===================== */
 /* ===================== */

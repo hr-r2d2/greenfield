@@ -29,15 +29,10 @@ class Header extends React.Component {
       showFavorites: false,
       showCreateChat: false,
       showReviewFeed: false,
-<<<<<<< HEAD
-      favorites: [],
-      showProfile: false, //keep false by default
-=======
       showJoinRoom: false,
       favorites: [],
       showProfile: false, 
       showInvitation: false
->>>>>>> dev
     };
 
     this.showLogin = this.showLogin.bind(this);
@@ -58,8 +53,6 @@ class Header extends React.Component {
 
     this.toggleShow = this.toggleShow.bind(this)
     this.toggleProfile = this.toggleProfile.bind(this)
-<<<<<<< HEAD
-=======
 
     this.showInvitation = this.showInvitation.bind(this);
     this.closeInvitation = this.closeInvitation.bind(this);
@@ -74,7 +67,6 @@ class Header extends React.Component {
         this.props.handleSession(response);
       }
     });
->>>>>>> dev
   }
 
   toggleShow(){
@@ -164,42 +156,6 @@ class Header extends React.Component {
       return (
         <div>
           <Navbar inverse fixedTop>
-<<<<<<< HEAD
-            <Navbar.Header>
-
-              <Navbar.Brand>
-                <a href="/">STUD(y)</a>
-              </Navbar.Brand>
-            </Navbar.Header>
-
-
-
-            <Nav pullRight>
-              <NavDropdown title="Profile" id="basic-nav-dropdown">
-                  <MenuItem>Signed in as {this.props.username}</MenuItem>
-                  <MenuItem onClick={this.showCreateChat}>Create/ Join STUD(y) Chat</MenuItem>
-                  <MenuItem onClick={this.showFavorites}>Favorites</MenuItem>
-              </NavDropdown>
-              <NavDropdown title="Settings" id="basic-nav-dropdown">
-                   <MenuItem onClick={this.toggleProfile}>Profile</MenuItem>
-                    {
-                      this.state.showProfile ?   
-                    (<Profile toggleProfile={this.toggleProfile} showProfile={this.state.showProfile} userId={this.props.userId} user={this.props.username} profilePic="https://pbs.twimg.com/profile_images/702479650237366272/HyN65Fu7_400x400.jpg"/>)                
-                    :
-                    null             
-                    }
-
-                    {this.props.membership
-                    ? <MenuItem>Manage membership</MenuItem>
-                    : <MenuItem onClick={this.toggleShow}>Be a STUD</MenuItem>
-                    }
-                    <MenuItem onClick={this.props.showReviewFeed}>Review Feed</MenuItem>
-
-                    <MenuItem divider />
-                    <MenuItem onClick={() => {return this.props.logout()}}>Logout</MenuItem>         
-              </NavDropdown>
-            </Nav>
-=======
               <Navbar.Header>
 
                 <Navbar.Brand>
@@ -243,7 +199,6 @@ class Header extends React.Component {
                         <MenuItem onClick={() => {return this.props.logout()}}>Logout</MenuItem>         
                   </NavDropdown>
               </Nav>
->>>>>>> dev
           </Navbar>
 
           <Modal style={{}} show={this.state.show} onHide={this.toggleShow}>
@@ -262,10 +217,7 @@ class Header extends React.Component {
           </Modal>
 
           <CreateChat 
-<<<<<<< HEAD
-=======
             rooms={this.props.rooms}
->>>>>>> dev
             getGroups={this.props.getGroups}
             userId={this.props.userId} 
             showCreateChat={this.state.showCreateChat}

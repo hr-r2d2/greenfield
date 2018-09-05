@@ -420,8 +420,6 @@ let updateMembership = (userId, cb) => {
   })
 }
 
-<<<<<<< HEAD
-=======
   /* ======================== */
   /* CHAT FUNCTIONS           */
   /* ======================== */
@@ -519,7 +517,6 @@ let deleteInvitation = ( id, cb) => {
   })
 }
 
->>>>>>> dev
 let addPic = ({user_id, url}, cb) => {
   console.log(user_id);
   console.log(url);
@@ -550,10 +547,6 @@ let getPic = (user_id, cb) => {
   })
 }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> dev
 module.exports = {
   saveSpots: saveSpots,
   addPic: addPic,
@@ -575,13 +568,10 @@ module.exports = {
   updateMembership: updateMembership,
   updateBio: updateBio,
   getBio: getBio,
-<<<<<<< HEAD
-=======
   createGroup: createGroup, 
   selectGroups: selectGroups, 
   sendInvitation: sendInvitation,
   getInvitations: getInvitations, 
   acceptInvitation: acceptInvitation,
   deleteInvitation: deleteInvitation
->>>>>>> dev
 };

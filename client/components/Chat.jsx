@@ -12,11 +12,7 @@ class Chat extends React.Component {
       textMessage: ''
     }
     this.socket = io.connect('http://localhost:8080');
-<<<<<<< HEAD
-    this.socket.emit('JOIN_ROOM', this.props.password) // TODO: Change to select first room in chat array 
-=======
     this.socket.emit('JOIN_ROOM', this.props.selectedRoom['group_name']) // TODO: Change to select first room in chat array 
->>>>>>> dev
     this.socket.on('SEND_MESSAGE', (data) => this.receiveMessages(data))
 
     this.handleChange = this.handleChange.bind(this);
@@ -36,11 +32,7 @@ class Chat extends React.Component {
   // TODO: Change room to be the first room in the chat array 
   sendMessage(e) {
     e.preventDefault();
-<<<<<<< HEAD
-    let message = {room: this.props.password , userId: this.props.userId, username: this.props.username, textMessage: this.state.textMessage}
-=======
     let message = {room: this.props.selectedRoom['group_name'], userId: this.props.userId, username: this.props.username, textMessage: this.state.textMessage}
->>>>>>> dev
     console.log('Sending message: ', message)
     this.socket.emit('SEND_MESSAGE', message)  
     this.setState({textMessage: ''})
@@ -50,11 +42,7 @@ class Chat extends React.Component {
     return (  
     <div className="chat">  
       <div className="panel panel-default">
-<<<<<<< HEAD
-        <div className="panel-heading"><strong>[PLACEHOLDER] Stud(y) Group</strong></div>
-=======
         <div className="panel-heading"><strong>{this.props.selectedRoom['group_topic']} Stud(y) Group</strong></div>
->>>>>>> dev
 
         {/* MESSAGES */}
 
